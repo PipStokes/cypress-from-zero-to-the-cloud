@@ -9,7 +9,7 @@ it('passes', () => {
 })
 
 it('fills in the required fields and submits the form', () => {
-cy.get('#FirstName').type('Bill')
+cy.get('#firstName').type('Bill')
 cy.get('#lastName').type('Pokes')
 cy.get('#email').type('billpokes@gravityhurts.com')
 cy.contains('Praise').click()
