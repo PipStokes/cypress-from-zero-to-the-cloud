@@ -1,6 +1,6 @@
 beforeEach(() => {
   cy.visit('./src/index.html')
-  cy.title().should('eq', 'TAT Customer Service Center')
+  cy.title().should('eq', 'TTA Customer Service Center')
 })
 
 describe('template spec', () => {
