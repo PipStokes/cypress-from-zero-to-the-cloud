@@ -6,7 +6,6 @@ beforeEach(() => {
 describe('template spec', () => {
 it('passes', () => {
   cy.visit('https://example.cypress.io')
-  
 })
 
 it('fills in the required fields and submits the form', () => {
