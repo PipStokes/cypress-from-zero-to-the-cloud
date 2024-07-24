@@ -8,18 +8,23 @@ it('passes', () => {
   cy.visit('https://example.cypress.io')
 })
 
+//Cypress._.times(5, () => {
 it('fills in the required fields and submits the form', () => {
-cy.get('#firstName').type('Bill')
-cy.get('#lastName').type('Pokes')
-cy.get('#email').type('billpokes@gravityhurts.com')
-cy.contains('Praise').click()
-cy.get('#open-text-area').type('Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!', {delay:0})
-cy.contains('Send').click()
+cy.clock()
+  cy.get('#firstName').type('Bill')
+  cy.get('#lastName').type('Pokes')
+  cy.get('#email').type('billpokes@gravityhurts.com')
+  cy.contains('Praise').click()
+  cy.get('#open-text-area').type('Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!Good job everyone, keep it up!!', {delay:0})
+  cy.contains('Send').click()
   
 cy.get('[class*="success"]').should('be.visible')
+cy.tick(3000)
+cy.get('[class*="success"]').should('not.be.visible')
 })
-
+//})
 it('displays an error message when submitting the form with an email with invalid formatting', () => {
+cy.clock()
 cy.get('#firstName').type('Bill')
 cy.get('#lastName').type('Pokes')
 cy.get('#email').type('billpokesgravityhurts.com')
@@ -28,6 +33,8 @@ cy.get('#open-text-area').type('Good job everyone')
 cy.contains('Send').click()
   
 cy.get('[class*="error"]').should('be.visible')
+cy.tick(3000)
+cy.get('[class*="success"]').should('not.be.visible')
 })
 
 it('checks telephone number field is blank when other than a number', () => {
@@ -38,6 +45,7 @@ cy.get('#phone').should('have.length', 1)
 })
 
 it('displays an error message when the phone becomes required but is not filled in before the form submission', () => {
+cy.clock() 
 cy.get('#firstName').type('Bill')
 cy.get('#lastName').type('Pokes')
 cy.get('#email').type('billpokes@gravityhurts.com')
@@ -46,6 +54,8 @@ cy.get('#check input[type="checkbox"]').last().check()
 cy.contains('Send').click()
   
 cy.get('[class*="error"]').should('be.visible')
+cy.tick(3000)
+cy.get('[class*="success"]').should('not.be.visible')
 })
 
 it('//fills and clears the first name, last name, email, and phone fields', () => {
@@ -60,14 +70,20 @@ cy.get('#phone').clear().should('have.value', '')
 })
 
 it('displays an error message when submitting the form without filling the required fields' , () => {
+cy.clock() 
 cy.contains('Send').click()
 cy.get('[class*="error"]').should('be.visible')
+cy.tick(3000)
+cy.get('[class*="success"]').should('not.be.visible')
 })
 
 it(`successfully submits the form using a custom command.`, () => {
+cy.clock()
 cy.fillMandatoryFieldsAndSubmit()
 
 cy.get('.success').should('be.visible')
+cy.tick(3000)
+cy.get('[class*="success"]').should('not.be.visible')
 })
 
 it('selects a product (YouTube) by its content', () => {
@@ -160,5 +176,34 @@ it('independently test the privacy policy page', () => {
 
 })
 
+it('displays and hides the success and error messages using .invoke', () => {
+  cy.get('.success')
+    .should('not.be.visible')
+    .invoke('show')
+    .should('be.visible')
+    .and('contain', 'Message successfully sent.')
+    .invoke('hide')
+    .should('not.be.visible')
+  cy.get('.error')
+    .should('not.be.visible')
+    .invoke('show')
+    .should('be.visible')
+    .and('contain', 'Validate the required fields!')
+    .invoke('hide')
+    .should('not.be.visible')
+})
+
+it('fills in the text area field using the invoke command', () => {
+  cy.get('#open-text-area').invoke('val', 'some text').should('have.value', 'some text')
+})
+
+it.only('makes an HTTP request', () => {
+  cy.request('https://tat-csc.s3.sa-east-1.amazonaws.com/index.html').then((response) => {
+      expect(response.status).to.equal(200);
+      expect(response.statusText).to.equal('OK')
+      expect(response.body).contains('TAT CSC')
+  })
+})
 
 })
+
