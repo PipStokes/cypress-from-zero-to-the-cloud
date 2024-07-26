@@ -205,5 +205,11 @@ it.only('makes an HTTP request', () => {
   })
 })
 
+it.only('find the cat', () => {
+  cy.get('#cat')
+  .should('not.be.visible')
+  .invoke('show')
+  .should('be.visible')
+})
 })
 
